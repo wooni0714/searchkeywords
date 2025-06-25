@@ -1,0 +1,71 @@
+networks:
+  elk:
+    driver: bridge
+
+services:
+  # Elasticsearch 설정
+  elasticsearch:
+    container_name: elasticsearch
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: 8.10.4
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./elk-stack/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: false
+      xpack.security.transport.ssl.enabled: false
+      ELASTIC_USERNAME: "elastic"
+      ELASTIC_PASSWORD: "LYkuKO9ZWro8mQ=FqPg-"
+    networks:
+      - elk
+
+  # Logstash 설정
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:8.10.4
+    ports:
+      - 5001:5001
+      - 9600:9600
+    volumes:
+      - ./elk-stack/logstash/config/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./elk-stack/logstash/logs:/usr/share/logstash/logs
+    environment:
+      - "path.logs=/usr/share/logstash/logs"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+  # Kibana 설정
+  kibana:
+    container_name: kibana
+    image: kibana:8.10.4
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./elk-stack/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      - elk
+
+  # Filebeat 설정
+  filebeat:
+    container_name: filebeat
+    image: docker.elastic.co/beats/filebeat:8.10.4
+    user: root
+    volumes:
+      - ./elk-stack/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./elk-stack/logs:/var/log/myapp:ro
+    depends_on:
+      - logstash
+    networks:
+      - elk
