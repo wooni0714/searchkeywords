@@ -31,6 +31,10 @@ public class TrieManager {
         Set<String> badWords = getBadWords();
         Set<String> allowWords = getAllowWords();
 
+        // 현재버전 스냅샷
+        Trie prevBadTrie = badTrieRef.get();
+        Trie prevAllowTrie = allowTrieRef.get();
+
         try {
             Trie badTrie = Trie.builder().ignoreCase().addKeywords(badWords).build();
             Trie allowTrie = Trie.builder().ignoreCase().addKeywords(allowWords).build();
@@ -43,6 +47,10 @@ public class TrieManager {
 
             log.info("bad: {}, allow: {}", badWords.size(), allowWords.size());
         } catch (Exception e) {
+            // reload 실패시 이전 버전으로 rollback
+            badTrieRef.set(prevBadTrie);
+            allowTrieRef.set(prevAllowTrie);
+
             log.error("Trie build error", e);
             throw new BusinessException(CODE_9104);
         }
