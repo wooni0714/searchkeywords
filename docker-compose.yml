@@ -17,11 +17,7 @@ services:
     volumes:
       - ./elk-stack/elasticsearch:/usr/share/elasticsearch/data
     environment:
-      discovery.type: single-node
-      xpack.security.enabled: false
-      xpack.security.transport.ssl.enabled: false
-      ELASTIC_USERNAME: "elastic"
-      ELASTIC_PASSWORD: "LYkuKO9ZWro8mQ=FqPg-"
+      node.name : elasticsearch
     networks:
       - elk
 
