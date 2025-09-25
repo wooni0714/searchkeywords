@@ -16,8 +16,9 @@ services:
       - 9300:9300
     volumes:
       - ./elk-stack/elasticsearch:/usr/share/elasticsearch/data
-    environment:
-      node.name : elasticsearch
+      - ./elk-stack/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elk-stack/elasticsearch/config/userdict_ko.txt:/usr/share/elasticsearch/config/userdict_ko.txt
+      - ./elk-stack/elasticsearch/config/stopwords_ko.txt:/usr/share/elasticsearch/config/stopwords_ko.txt
     networks:
       - elk
 

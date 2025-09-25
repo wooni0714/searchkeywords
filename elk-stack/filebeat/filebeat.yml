@@ -2,13 +2,21 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /var/log/myapp/*.log
+      - /var/log/myapp/*.json
     encoding: utf-8
 
-    ignore_older: 0
+    ignore_older: 15m
     scan_frequency: 10s
     close_inactive: 5m
-    clean_inactive: 0s
+    clean_inactive: 30m
+
+    json.keys_under_root: true
+    json.add_error_key: true
+    json.message_key: message
+
+    multiline.pattern: '^{'
+    multiline.negate: true
+    multiline.match: after
 
     fields:
       server_name: file-beat-server

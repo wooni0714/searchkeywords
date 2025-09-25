@@ -14,8 +14,10 @@ public enum ResultCode {
     CODE_9101(400, 9101, "popular_keywords 의 Aggregation 결과가 존재하지 않습니다."),
     CODE_9102(400, 9102, "금칙어 목록이 Redis에 존재하지 않습니다."),
     CODE_9103(400, 9103, "허용어 목록이 Redis에 존재하지 않습니다."),
-    CODE_9104(400, 9103, "금칙어/허용어 Trie 빌드 중 에러가 발생했습니다."),
-    CODE_9105(400, 9103, "Elasticsearch 요청 중 오류가 발생했습니다.");
+    CODE_9104(400, 9104, "금칙어/허용어 Trie 빌드 중 에러가 발생했습니다."),
+    CODE_9105(400, 9105, "Elasticsearch 요청 중 오류가 발생했습니다."),
+    CODE_9106(400, 9106, "Keyword Token이 비어있습니다."),
+    CODE_9107(400, 9107, "Elasticsearch query 요청 중 오류가 발생했습니다.");
 
     private final Integer httpStatus;
     private final Integer code;

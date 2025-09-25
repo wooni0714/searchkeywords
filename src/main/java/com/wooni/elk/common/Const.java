@@ -8,4 +8,6 @@ public final class Const {
     public static final String INDEX_NAME = "searchindexkeyword";
 
     public static final String INDEX_CREATE_SUCCESS = "Index created successfully";
+
+    public static final String PRODUCTS = "products";
 }

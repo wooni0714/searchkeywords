@@ -22,7 +22,6 @@ import static com.wooni.elk.common.Const.INDEX_NAME;
 @RequiredArgsConstructor
 public class IndexInitializerService {
     private static final Logger log = LogManager.getLogger(IndexInitializerService.class);
-
     private final ElasticsearchClient client;
 
     @PostConstruct
@@ -41,23 +40,33 @@ public class IndexInitializerService {
               "tokenizer": {
                 "nori_tokenizer": {
                   "type": "nori_tokenizer",
-                  "decompound_mode": "mixed"
+                  "decompound_mode": "none",
+                  "user_dictionary": "userdict_ko.txt"
                 }
               },
               "filter": {
                 "nori_pos_filter": {
                   "type": "nori_part_of_speech",
                   "stoptags": [
-                    "E","IC","J","MAG","MAJ","MM","NA","NR","NP","SC","SE",
-                    "SF","SH","SL","SN","VV","VA","VX","EF","EC","ETM","ETN"
+                    "E", "IC", "J", "MAG", "MAJ", "MM", "NA", "NR", "NP",
+                    "SC", "SE", "SF", "SH", "SL", "SN", "VV", "VA", "VX",
+                    "EF", "EC", "ETM", "ETN"
                   ]
+                },
+                "ko_stop_filter": {
+                  "type": "stop",
+                  "stopwords_path": "stopwords_ko.txt"
                 }
               },
               "analyzer": {
                 "nori_analyzer": {
                   "type": "custom",
                   "tokenizer": "nori_tokenizer",
-                  "filter": ["lowercase","nori_pos_filter"]
+                  "filter": [
+                    "lowercase",
+                    "nori_pos_filter",
+                    "ko_stop_filter"
+                  ]
                 }
               }
             }
@@ -67,9 +76,12 @@ public class IndexInitializerService {
               "searchKeyword": {
                 "type": "text",
                 "analyzer": "nori_analyzer",
-                "fielddata": true
+                "fielddata": false
               },
               "searchKeywordNori": {
+                "type": "keyword"
+              },
+              "searchTokens": {
                 "type": "keyword"
               },
               "searchDate": {
@@ -94,5 +106,7 @@ public class IndexInitializerService {
         if (response.acknowledged()) {
             log.info(INDEX_CREATE_SUCCESS);
         }
+
+        log.debug("Index creation settings: {}", response);
     }
 }

@@ -1,0 +1,27 @@
+{
+  "settings": {
+    "number_of_shards": 5,
+    "number_of_replicas": 1,
+    "analysis": {
+      "tokenizer": {
+        "nori_tokenizer": {
+          "type": "nori_tokenizer",
+          "decompound_mode": "mixed"
+        }
+      },
+      "filter": {
+        "nori_pos_filter": {
+          "type": "nori_part_of_speech",
+          "stoptags": ["E","IC","J","MAG","MAJ","NA","NR","NP","SC","SE","SF","SH","SL","SN","EF","EC","ETN"]
+        }
+      },
+      "analyzer": {
+        "korean_search": {
+          "type": "custom",
+          "tokenizer": "nori_tokenizer",
+          "filter": ["lowercase","nori_pos_filter"]
+        }
+      }
+    }
+  }
+}

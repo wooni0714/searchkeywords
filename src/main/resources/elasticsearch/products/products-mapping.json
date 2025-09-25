@@ -1,0 +1,15 @@
+{
+  "mappings": {
+    "properties": {
+      "product_id":  { "type": "keyword" },
+      "title":       { "type": "text", "analyzer": "korean_search" },
+      "brand":       { "type": "text", "analyzer": "korean_search" },
+      "brand_id":    { "type": "keyword" },
+      "category_id": { "type": "keyword" },
+      "description": { "type": "text", "analyzer": "korean_search" },
+      "price":       { "type": "integer" },
+      "on_sale":     { "type": "boolean" },
+      "launch_date": { "type": "date" }
+    }
+  }
+}

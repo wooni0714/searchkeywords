@@ -4,3 +4,9 @@ network.host: 0.0.0.0
 http.port: 9200
 discovery.type: single-node
 action.destructive_requires_name: false
+
+# 보안기능 운영서버에서는 true
+xpack.security.enabled: false
+xpack.security.transport.ssl.enabled: false
+#ELASTIC_USERNAME: ""
+#ELASTIC_PASSWORD: ""
